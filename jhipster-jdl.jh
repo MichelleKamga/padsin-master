@@ -1,0 +1,280 @@
+entity Assurance {
+    denomination String required,
+    situationGeographique String,
+    telephone String required,
+    email String,
+    police Police,
+    deleted Boolean
+}
+
+enum Police {
+   GLOBALES_DOMMAGES,
+   MATERIELS_FLOTTANTS, 
+   MATERIELS_TERRESTRES A MOTEUR,
+   ASSURANCES DE RESPONSABILITE CIVILE
+}
+
+entity Contrat {
+    code String required,
+	intitule String,
+    dateContrat LocalDate,
+    dateFinContrat LocalDate,
+    fichier Blob required unique,
+    deleted Boolean
+    }
+    
+entity Avenant {
+    code String required,
+    intitule String,
+    date LocalDate,
+    fichier Blob required,
+    deleted Boolean
+}
+
+
+entity Reglement {
+    direction String,
+    dateReglement LocalDate,
+    typeReglement String,
+    beneficiaire String required,
+    montant Integer,
+	deleted Boolean
+    }
+    
+    entity Expert {
+    nom String required,
+	telephone String required,
+    montantExpertise Long,
+    montantIndemnise Long,
+    pv Blob required,
+    deleted Boolean
+    }
+
+
+entity Sinistre { 
+  code String required,
+  intitule String,
+  dateDebut LocalDate,
+  dateCloture LocalDate,
+  comportement String,
+  cause String,
+  lieu String,
+  victime String,
+  deleted Boolean
+   }  
+   
+  entity Navire { 
+  denomination String required,
+  anneFabrication Integer,
+  valeurNeuveHT String,
+  valeurVenale String,
+  garantieSollicite String,
+  quantite Integer,
+  localisation String,
+  dateAcquisition LocalDate,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+   
+ entity Bouee {
+ denomination String required,
+  anneFabrication Integer,
+  valeurNeuveHT String,
+  valeurVenale String,
+  garantieSollicite String,
+  quantite Integer,
+  localisation String,
+  dateAcquisition LocalDate,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+   
+  entity Vehicule { 
+  marque String,
+  immatriculation String required,
+  puissance Integer,
+  nbrePlace Integer,
+  energie String,
+  directionAffectation String,
+  zoneCirculation String,
+  usage Integer,
+  dateAttribution LocalDate,
+  valeurNeuve String,
+  valeurVenale String,
+  intervalAss String,
+  police Police,
+  deleted Boolean
+   }
+   
+   entity EnginsDeuxRoues { 
+  marque String,
+  immatriculation String required,
+  puissance Integer,
+  nbrePlace Integer,
+  energie String,
+  directionAffectation String,
+  zoneCirculation String,
+  usage Integer,
+  dateAttribution LocalDate,
+  valeurNeuve String,
+  valeurVenale String,
+  intervalAss String,
+  police Police,
+  deleted Boolean
+   }
+   
+  entity EnginsManutention { 
+  marque String,
+  immatriculation String required,
+  puissance Integer,
+  nbrePlace Integer,
+  energie String,
+  directionAffectation String,
+  zoneCirculation String,
+  usage Integer,
+  dateAttribution LocalDate,
+  valeurNeuve String,
+  valeurVenale String,
+  intervalAss String,
+  police Police,
+  deleted Boolean
+   }
+   
+enum Habitation { 
+   USAGE DE BUREAUX, 
+   USAGE HABITATION
+   }
+   
+  entity Immeuble { 
+  designation String required,
+  valeurEtat String,
+  valeurRetenue String,
+  localisation String,
+  dateAcquisition LocalDate,
+  typeImmeuble Habitation,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+  entity RCProImmeuble { 
+  denomination String,
+  intitule String,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+ entity MultirisqueOPortuaire { 
+  designation String required,
+  valeurEtat String,
+  valeurRetenue String,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+ entity CoffrePlafond { 
+  marque String,
+  services String required,
+  emplacement String,
+  plafond String,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+ entity IndividuelAccident { 
+  denomination String,
+  nomResponsable String required,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+  entity MaterielInfor { 
+  designation String,
+  nbrepiece Integer required,
+  valeur Long,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+enum Activite {
+     ACTIVITES PRINCIPALES, 
+     ACTIVITES ANNEXES
+   
+  }
+
+enum TypeAss {
+RC EXPLOITATION, 
+RC PROFESSIONNELLE, 
+RC SPORTIVE, 
+INDIVIDUELLE ACCIDENT
+}
+   
+  entity AssuranceResp { 
+  typeAss TypeAss,
+  assure String,
+  masseSalarial String,
+  nbreDocM Integer,
+  nbrePharmac Integer,
+  nbreInfirm Integer,
+  nbreAideS Integer,
+  nbreRadiolog Integer,
+  nbrePerson Integer,
+  activite Activite,
+  police Police,
+  deleted Boolean
+  
+   }
+   
+   relationship OneToMany {
+	Contrat{assurance} to Assurance,
+    Sinistre{vehicule} to Vehicule,
+    Sinistre{enginsDeuxRoues} to EnginsDeuxRoues,
+    Sinistre{enginsManutention} to EnginsManutention,
+    Sinistre{navire} to Navire,
+    Sinistre{bouee} to Bouee,
+    Sinistre{immeuble} to Immeuble,
+    Sinistre{materielInfor} to MaterielInfor,
+    Sinistre{rcProImmeuble} to RCProImmeuble,
+    Sinistre{multirisqueOPortuaire} to MultirisqueOPortuaire,
+    Sinistre{coffrePlafond} to CoffrePlafond,
+    Sinistre{assuranceResp} to AssuranceResp,
+    Sinistre{individuelAccident} to IndividuelAccident
+    	
+}
+
+relationship ManyToOne {
+	Expert{sinistre} to Sinistre,
+    Contrat{vehicule} to Vehicule,
+    Contrat{enginsDeuxRoues} to EnginsDeuxRoues,
+    Contrat{enginsManutention} to EnginsManutention,
+    Contrat{navire} to Navire,
+    Contrat{bouee} to Bouee,
+    Contrat{immeuble} to Immeuble,
+    Contrat{materielInfor} to MaterielInfor,
+    Contrat{rcProImmeuble} to RCProImmeuble,
+    Contrat{multirisqueOPortuaire} to MultirisqueOPortuaire,
+    Contrat{coffrePlafond} to CoffrePlafond,
+    Contrat{assuranceResp} to AssuranceResp,
+    Contrat{individuelAccident} to IndividuelAccident
+    
+}
+
+relationship OneToOne {
+	Avenant{contrat} to Contrat
+    Sinistre {reglement} to Reglement
+}
+
+relationship ManyToMany {
+	Assurance{sinistre(code)} to Sinistre{assurance}
+}
+
+  
