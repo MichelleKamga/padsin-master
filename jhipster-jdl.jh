@@ -3,15 +3,14 @@ entity Assurance {
     situationGeographique String,
     telephone String required,
     email String,
-    police Police,
     deleted Boolean
 }
 
 enum Police {
    GLOBALES_DOMMAGES,
    MATERIELS_FLOTTANTS, 
-   MATERIELS_TERRESTRES A MOTEUR,
-   ASSURANCES DE RESPONSABILITE CIVILE
+   MATERIELS_TERRESTRES,
+   ASSURANCES_RESPONSABILITE
 }
 
 entity Contrat {
@@ -19,7 +18,7 @@ entity Contrat {
 	intitule String,
     dateContrat LocalDate,
     dateFinContrat LocalDate,
-    fichier Blob required unique,
+    fichier Blob required,
     deleted Boolean
     }
     
@@ -145,8 +144,8 @@ entity Sinistre {
    }
    
 enum Habitation { 
-   USAGE DE BUREAUX, 
-   USAGE HABITATION
+   USAGE_BUREAUX, 
+   USAGE_HABITATION
    }
    
   entity Immeuble { 
@@ -205,17 +204,17 @@ enum Habitation {
   
    }
    
-enum Activite {
-     ACTIVITES PRINCIPALES, 
-     ACTIVITES ANNEXES
+   enum Activite {
+     ACTIVITES_PRINCIPALES, 
+     ACTIVITES_ANNEXES
    
   }
 
 enum TypeAss {
-RC EXPLOITATION, 
-RC PROFESSIONNELLE, 
-RC SPORTIVE, 
-INDIVIDUELLE ACCIDENT
+RC_EXPLOITATION, 
+RC_PROFESSIONNELLE, 
+RC_SPORTIVE, 
+INDIVIDUELLE_ACCIDENT
 }
    
   entity AssuranceResp { 
@@ -234,47 +233,36 @@ INDIVIDUELLE ACCIDENT
   
    }
    
-   relationship OneToMany {
-	Contrat{assurance} to Assurance,
-    Sinistre{vehicule} to Vehicule,
-    Sinistre{enginsDeuxRoues} to EnginsDeuxRoues,
-    Sinistre{enginsManutention} to EnginsManutention,
-    Sinistre{navire} to Navire,
-    Sinistre{bouee} to Bouee,
-    Sinistre{immeuble} to Immeuble,
-    Sinistre{materielInfor} to MaterielInfor,
-    Sinistre{rcProImmeuble} to RCProImmeuble,
-    Sinistre{multirisqueOPortuaire} to MultirisqueOPortuaire,
-    Sinistre{coffrePlafond} to CoffrePlafond,
-    Sinistre{assuranceResp} to AssuranceResp,
-    Sinistre{individuelAccident} to IndividuelAccident
-    	
-}
-
-relationship ManyToOne {
-	Expert{sinistre} to Sinistre,
-    Contrat{vehicule} to Vehicule,
-    Contrat{enginsDeuxRoues} to EnginsDeuxRoues,
-    Contrat{enginsManutention} to EnginsManutention,
-    Contrat{navire} to Navire,
-    Contrat{bouee} to Bouee,
-    Contrat{immeuble} to Immeuble,
-    Contrat{materielInfor} to MaterielInfor,
-    Contrat{rcProImmeuble} to RCProImmeuble,
-    Contrat{multirisqueOPortuaire} to MultirisqueOPortuaire,
-    Contrat{coffrePlafond} to CoffrePlafond,
-    Contrat{assuranceResp} to AssuranceResp,
-    Contrat{individuelAccident} to IndividuelAccident
-    
+   relationship OneToOne {
+	Avenant{contrat(code)} to Contrat
+ }   
+relationship OneToOne {
+    Reglement{sinistre(code)} to Sinistre
 }
 
 relationship OneToOne {
-	Avenant{contrat} to Contrat
-    Sinistre {reglement} to Reglement
+	Contrat{assurance(denomination)} to Assurance
 }
-
-relationship ManyToMany {
-	Assurance{sinistre(code)} to Sinistre{assurance}
+   
+ 
+ relationship ManyToOne {
+	Sinistre{expert(nom)} to Expert,
+    Vehicule{sinistre(code)} to Sinistre,
+    EnginsDeuxRoues{sinistre(code)} to Sinistre,
+    EnginsManutention{sinistre(code)} to Sinistre,
+    Navire{sinistre(code)} to Sinistre,
+    Bouee{sinistre(code)} to Sinistre,
+    Immeuble{sinistre(code)} to Sinistre,
+    MaterielInfor{sinistre(code)} to Sinistre,
+    RCProImmeuble{sinistre(code)} to Sinistre,
+    MultirisqueOPortuaire{sinistre(code)} to Sinistre,
+    CoffrePlafond{sinistre(code)} to Sinistre,
+    AssuranceResp{sinistre(code)} to Sinistre,
+    IndividuelAccident{sinistre(code)} to Sinistre
+    	
 }
+  
 
   
+
+ 
